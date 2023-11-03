@@ -9,10 +9,10 @@ pub struct Note {
     id: i32,
     #[serde(rename = "label")]
     title: String,
-    editor_type: String,
+    editor: String,
     content: String,
-    is_delete: bool,
-    create_time: i64,
+    is_delete: Option<bool>,
+    create_time: Option<String>,
     children: Option<Vec<Note>>,
 }
 
@@ -26,7 +26,7 @@ pub fn get_notes() -> Response<Vec<Note>> {
             vec.push(Note {
                 id: row.get("id")?,
                 title: row.get("title")?,
-                editor_type: row.get("editor_type")?,
+                editor: row.get("editor")?,
                 content: row.get("content")?,
                 is_delete: row.get("is_delete")?,
                 create_time: row.get("create_time")?,
@@ -38,5 +38,26 @@ pub fn get_notes() -> Response<Vec<Note>> {
     {
         Ok(records) => Response::new(200, records, "Successful！".to_string()),
         Err(_err) => Response::new(500, Vec::new(), _err.to_string()),
+    }
+}
+
+#[tauri::command]
+pub async fn create_note(note: Note) -> Response<Option<bool>> {
+    match exec(|conn| {
+        let conn = conn.execute(
+            "INSERT INTO notes (title, editor, content, is_delete)\
+             VALUES (:title, :editor, :content, :is_delete)",
+            params![
+                note.title,
+                note.editor,
+                note.content,
+                false
+            ],
+        )?;
+        Ok(conn > 0)
+    })
+    {
+        Ok(_count) => Response::new(200, Some(true), "Successful！".to_string()),
+        Err(_err) => Response::new(500, Some(false), _err.to_string()),
     }
 }

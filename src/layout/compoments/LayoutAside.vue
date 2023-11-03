@@ -15,8 +15,16 @@
                 node-key="id"
                 :data="data"
                 :show-line="true"
-                :style="{height: height + 'px', width: width + 'px'}"
-                @node-click="handlerNodeClick">
+                :style="{height: height + 'px', width: width + 'px'}">
+        <template #operation="{ node }">
+          <div v-if="node.data.draft"
+               class="operation-slot">
+            <TinyTooltip effect="dark"
+                         content="保存">
+              <IconSave @click="handlerSave(node.data)"></IconSave>
+            </TinyTooltip>
+          </div>
+        </template>
       </TinyTree>
     </TinyLayout>
   </div>
@@ -31,14 +39,25 @@ import {
   DropdownMenu as TinyDropdownMenu,
   Layout as TinyLayout,
   Notify,
+  Tooltip as TinyTooltip,
   Tree as TinyTree
 } from '@opentiny/vue'
+import {IconSave} from '@opentiny/vue-icon'
 import {invoke} from '@tauri-apps/api/tauri'
 import {Note} from "../../model/note.ts";
 
 export default defineComponent({
   name: 'LayoutAside',
-  components: {TinyLayout, TinyDropdown, TinyDropdownMenu, TinyDropdownItem, TinyDivider, TinyTree},
+  components: {
+    TinyLayout,
+    TinyDropdown,
+    TinyDropdownMenu,
+    TinyDropdownItem,
+    TinyDivider,
+    TinyTooltip,
+    TinyTree,
+    IconSave: IconSave()
+  },
   props: {
     height: {
       type: Number
@@ -81,7 +100,7 @@ export default defineComponent({
         title: title,
         label: title,
         name: key,
-        type: 'Markdown',
+        editor: 'Markdown',
         content: '',
         draft: true
       }
@@ -89,8 +108,29 @@ export default defineComponent({
       this.$refs.tree.setCurrentKey(note.id)
       this.$emit('onClick', note)
     },
-    handlerNodeClick(data) {
-      console.log(data)
+    handlerSave(note: Note) {
+      note.id = 0
+      invoke('create_note', {note: note})
+          .then(response => {
+            if (response.code === 200 && response.data) {
+              Notify({
+                type: 'success',
+                message: `保存 [ ${note.title} ] 成功`,
+                position: 'top',
+                title: '提示',
+                duration: 1000
+              })
+              this.handlerInitialize()
+            } else {
+              Notify({
+                type: 'error',
+                message: response.message,
+                position: 'top',
+                title: '错误',
+                duration: 1000
+              })
+            }
+          })
     }
   }
 });

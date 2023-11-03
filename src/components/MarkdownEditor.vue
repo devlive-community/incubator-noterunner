@@ -22,6 +22,11 @@ export default defineComponent({
     return {
       localContent: this.content
     }
+  },
+  watch: {
+    localContent() {
+      this.$emit('onChange', this.localContent)
+    }
   }
 });
 </script>

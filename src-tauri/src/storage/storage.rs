@@ -26,7 +26,7 @@ fn init_table() {
                 (
                     id          INTEGER PRIMARY KEY AUTOINCREMENT,
                     title       VARCHAR(2000) NOT NULL,
-                    editor_type VARCHAR(2000) NOT NULL DEFAULT 'Markdown',
+                    editor VARCHAR(2000) NOT NULL DEFAULT 'Markdown',
                     content     TEXT,
                     is_delete   BOOLEAN                DEFAULT FALSE,
                     create_time timestamp              DEFAULT current_timestamp

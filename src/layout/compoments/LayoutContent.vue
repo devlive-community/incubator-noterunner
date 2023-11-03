@@ -9,9 +9,10 @@
                      :title="item.title"
                      :style="{margin: 0, padding: 0}"
                      :name="item.name">
-          <MarkdownEditor v-if="item.type === 'Markdown'"
+          <MarkdownEditor v-if="item.editor === 'Markdown'"
                           :style="{height: (height - 75) + 'px'}"
-                          :content="item.content">
+                          :content="item.content"
+                          @onChange="handlerChange($event, item)">
           </MarkdownEditor>
         </TinyTabItem>
       </TinyTabs>
@@ -50,7 +51,11 @@ export default defineComponent({
       }
     }
   },
-  methods: {}
+  methods: {
+    handlerChange(content: string, note: Note) {
+      note.content = content
+    }
+  }
 });
 </script>
 <style scoped>

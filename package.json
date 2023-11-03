@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@opentiny/vue": "3",
+    "@opentiny/vue-icon": "^3.11.0",
     "@tauri-apps/api": "^1.5.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5",

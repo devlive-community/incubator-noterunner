@@ -1,10 +1,10 @@
 export interface Note {
-    id: string,
+    id: string | number,
     key: string,
     title: string,
     label: string,
     name: string,
-    type: string,
+    editor: string,
     content: string,
     draft: boolean
 }

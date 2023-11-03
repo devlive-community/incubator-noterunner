@@ -9,7 +9,8 @@ fn main() {
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            note::get_notes
+            note::get_notes,
+            note::create_note
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
