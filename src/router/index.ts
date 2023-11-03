@@ -14,8 +14,6 @@ const routes: Array<RouteRecordRaw> = [
     }
 ];
 
-console.log(routes)
-
 const router = createRouter({
     history: createWebHistory(),
     routes
