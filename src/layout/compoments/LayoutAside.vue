@@ -29,8 +29,10 @@ import {
   DropdownItem as TinyDropdownItem,
   DropdownMenu as TinyDropdownMenu,
   Layout as TinyLayout,
+  Notify,
   Tree as TinyTree
 } from '@opentiny/vue'
+import {invoke} from '@tauri-apps/api/tauri'
 
 export default defineComponent({
   name: 'LayoutAside',
@@ -45,24 +47,28 @@ export default defineComponent({
   },
   data() {
     return {
-      data: [
-        {
-          label: '笔记本',
-          children: [
-            {
-              label: '文件夹',
-              children: [
-                {
-                  label: '笔记一'
-                },
-                {
-                  label: '笔记二'
-                }
-              ]
+      data: []
+    }
+  },
+  created() {
+    this.handlerInitialize()
+  },
+  methods: {
+    handlerInitialize() {
+      invoke('get_notes')
+          .then(response => {
+            if (response.code === 200) {
+              this.data = response.data
+            } else {
+              Notify({
+                type: 'error',
+                message: response.message,
+                position: 'top',
+                title: '错误',
+                duration: 1000
+              })
             }
-          ]
-        }
-      ]
+          })
     }
   }
 });
