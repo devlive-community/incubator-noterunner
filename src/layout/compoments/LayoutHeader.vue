@@ -1,14 +1,18 @@
 <template>
   <div>
     <TinyLayout :style="{backgroundColor: '#FFFFFF', height: height + 'px'}">
-      <TinyTabs v-model="activeName"
+      <TinyTabs v-model="activeTab"
                 tab-style="card"
                 :with-close="true">
-        <TinyTabItem :key="item.name"
-                     v-for="item in tabs"
+        <TinyTabItem v-for="item in tabs"
+                     :key="item.key"
                      :title="item.title"
                      :name="item.name">
-          {{ item.content }}
+          <tiny-button type="success">按钮</tiny-button>
+          <MarkdownEditor v-if="type === 'Markdown'"
+                          :style="{height: (height - 55) + 'px', width: '100%'}"
+                          :content="item.content">
+          </MarkdownEditor>
         </TinyTabItem>
       </TinyTabs>
     </TinyLayout>
@@ -18,31 +22,47 @@
 <script>
 import {defineComponent} from "vue"
 import {Layout as TinyLayout, TabItem as TinyTabItem, Tabs as TinyTabs} from '@opentiny/vue'
+import MarkdownEditor from "../../components/MarkdownEditor.vue";
 
 export default defineComponent({
   name: 'LayoutHeader',
-  components: {TinyLayout, TinyTabs, TinyTabItem},
+  components: {MarkdownEditor, TinyLayout, TinyTabs, TinyTabItem},
   props: {
     height: {
       type: Number
+    },
+    type: {
+      type: String
+    },
+    command: {
+      type: String
     }
   },
   data() {
     return {
-      activeName: 'first',
-      tabs: [
-        {
-          title: '文章一',
-          name: 'first',
-          content: '文章一的内容'
-        },
-        {
-          title: '文章二',
-          name: 'second',
-          content: '文章二的内容'
-        }
-      ]
+      activeTab: 'first',
+      tabs: []
     }
-  }
+  },
+  watch: {
+    command() {
+      if (this.command === 'created') {
+        const key = Date.now().toString()
+        this.tabs.push({
+          key: key,
+          title: '新笔记',
+          name: key,
+          content: ''
+        })
+        this.activeTab = key
+      }
+    }
+  },
+  methods: {}
 });
 </script>
+<style scoped>
+.tiny-tabs__content {
+  padding: 0;
+}
+</style>
