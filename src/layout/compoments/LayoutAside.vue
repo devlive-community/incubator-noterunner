@@ -15,7 +15,8 @@
                 node-key="id"
                 :data="data"
                 :show-line="true"
-                :style="{height: height + 'px', width: width + 'px'}">
+                :style="{height: height + 'px', width: width + 'px', borderRightWidth: '1px', borderRightStyle: 'groove'}"
+                @node-click="handlerNodeClick">
         <template #operation="{ node }">
           <div v-if="node.data.draft"
                class="operation-slot">
@@ -131,6 +132,9 @@ export default defineComponent({
               })
             }
           })
+    },
+    handlerNodeClick(data: Note) {
+      this.$emit('onClick', data)
     }
   }
 });

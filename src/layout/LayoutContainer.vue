@@ -23,7 +23,6 @@ import LayoutAside from "./compoments/LayoutAside.vue"
 import LayoutFooter from "./compoments/LayoutFooter.vue"
 import LayoutContent from "./compoments/LayoutContent.vue"
 import {Note} from "../model/note.ts";
-import {window} from "@tauri-apps/api";
 
 export default defineComponent({
   name: 'LayoutContainer',
@@ -35,18 +34,6 @@ export default defineComponent({
       headerHeight: 55,
       asideWidth: 200,
       note: null as Note
-    }
-  },
-  mounted() {
-    // Hang the window.onresize event to the mounted function so that the component updates when its window changes
-    const that = this
-    window.onresize = () => {
-      return (() => {
-        window.fullHeight = document.documentElement.clientHeight
-        window.fullWidth = document.documentElement.clientWidth
-        that.windowHeight = window.fullHeight
-        that.windowWidth = window.fullWidth
-      })()
     }
   },
   methods: {

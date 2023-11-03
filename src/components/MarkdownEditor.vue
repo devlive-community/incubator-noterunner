@@ -1,6 +1,7 @@
 <template>
   <div>
-    <VMarkdownEditor v-model="localContent">
+    <VMarkdownEditor v-model="localContent"
+                     :key="key">
     </VMarkdownEditor>
   </div>
 </template>
@@ -16,6 +17,9 @@ export default defineComponent({
   props: {
     content: {
       type: String
+    },
+    key: {
+      type: String | Number
     }
   },
   data() {

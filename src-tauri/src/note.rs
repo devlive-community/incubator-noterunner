@@ -7,12 +7,14 @@ use crate::storage::exec;
 #[derive(Serialize, Deserialize)]
 pub struct Note {
     id: i32,
-    #[serde(rename = "label")]
     title: String,
     editor: String,
     content: String,
     is_delete: Option<bool>,
     create_time: Option<String>,
+    key: Option<String>,
+    label: Option<String>,
+    name: Option<String>,
     children: Option<Vec<Note>>,
 }
 
@@ -30,6 +32,9 @@ pub fn get_notes() -> Response<Vec<Note>> {
                 content: row.get("content")?,
                 is_delete: row.get("is_delete")?,
                 create_time: row.get("create_time")?,
+                key: row.get("title")?,
+                label: row.get("title")?,
+                name: row.get("title")?,
                 children: Some(Vec::new()),
             })
         }
