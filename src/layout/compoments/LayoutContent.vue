@@ -11,7 +11,7 @@
                      :style="{margin: 0, padding: 0}"
                      :name="item.name">
           <MarkdownEditor v-if="item.editor === 'Markdown'"
-                          :style="{height: (height - 75) + 'px'}"
+                          :style="{height: (height as number - 75) + 'px'}"
                           :content="item.content"
                           :key="item.key"
                           @onChange="handlerChange($event, item)">
@@ -41,17 +41,18 @@ export default defineComponent({
   },
   data() {
     return {
-      activeTab: String | undefined,
-      tabs: []
+      activeTab: '',
+      tabs: Array<Note>()
     }
   },
   watch: {
     note() {
       const hasValue = this.tabs.filter(item => item.name === this.note?.name)
       if (hasValue.length === 0) {
-        this.tabs.push(this.note)
+        this.tabs.push(<Note>this.note)
       }
-      this.activeTab = this.note.key
+      const note = this.note as Note
+      this.activeTab = note.key
     }
   },
   methods: {

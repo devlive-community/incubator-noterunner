@@ -46,6 +46,7 @@ import {
 import {IconSave} from '@opentiny/vue-icon'
 import {invoke} from '@tauri-apps/api/tauri'
 import {Note} from "../../model/note.ts";
+import {Response} from "../../model/response.ts";
 
 export default defineComponent({
   name: 'LayoutAside',
@@ -78,7 +79,8 @@ export default defineComponent({
   methods: {
     handlerInitialize() {
       invoke('get_notes')
-          .then(response => {
+          .then(value => {
+            const response = value as Response
             if (response.code === 200) {
               this.data = response.data
             } else {
@@ -105,14 +107,16 @@ export default defineComponent({
         content: '',
         draft: true
       }
-      this.$refs.tree.append(note)
-      this.$refs.tree.setCurrentKey(note.id)
+      const tree = this.$refs.tree as any
+      tree.append(note)
+      tree.setCurrentKey(note.id)
       this.$emit('onClick', note)
     },
     handlerSave(note: Note) {
       note.id = 0
       invoke('create_note', {note: note})
-          .then(response => {
+          .then(value => {
+            const response = value as Response
             if (response.code === 200 && response.data) {
               Notify({
                 type: 'success',

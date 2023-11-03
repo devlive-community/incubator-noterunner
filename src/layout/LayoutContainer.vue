@@ -33,7 +33,7 @@ export default defineComponent({
       windowHeight: document.documentElement.clientHeight,
       headerHeight: 55,
       asideWidth: 200,
-      note: null as Note
+      note: undefined as Note | undefined
     }
   },
   methods: {

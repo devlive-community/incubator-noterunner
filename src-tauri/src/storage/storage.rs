@@ -1,11 +1,14 @@
+use std::path::PathBuf;
 use log::info;
 use rusqlite::{Connection, Error};
 
 const DB_FILE: &str = "notepad.db";
 
 fn open_connection() -> Result<Connection, Error> {
-    let connection = Connection::open(DB_FILE).unwrap();
-    return Ok(connection);
+    let database = PathBuf::from(&crate::app::APP.lock().app_dir)
+        .join(DB_FILE);
+    let conn = Connection::open(database)?;
+    Ok(conn)
 }
 
 pub fn exec<F, T>(func: F) -> Result<T, Error>
