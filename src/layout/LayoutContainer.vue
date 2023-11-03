@@ -1,13 +1,16 @@
 <template>
   <div class="layout">
     <TinyContainer pattern="fashion"
-                   :header-height="headerHeight">
+                   :style="{backgroundColor: '#FFFFFF'}"
+                   :header-height="headerHeight"
+                   :aside-width="asideWidth">
       <template #header>
         <LayoutHeader :height="headerHeight">
         </LayoutHeader>
       </template>
       <template #aside>
-        <LayoutAside :height="windowHeight">
+        <LayoutAside :height="windowHeight"
+                     :width="asideWidth">
         </LayoutAside>
       </template>
       <LayoutContent :height="windowHeight - headerHeight">
@@ -16,10 +19,6 @@
         <LayoutFooter></LayoutFooter>
       </template>
     </TinyContainer>
-    <div style="margin-top: 50px;">
-      Width: {{ windowWidth }}
-      Height: {{ windowHeight }}
-    </div>
   </div>
 </template>
 
@@ -38,17 +37,8 @@ export default defineComponent({
     return {
       windowWidth: document.documentElement.clientWidth,
       windowHeight: document.documentElement.clientHeight,
-      headerHeight: 30
-    }
-  },
-  watch: {
-    windowHeight(val) {
-      let that = this
-      console.log("实时屏幕高度：", val, that.windowHeight)
-    },
-    windowWidth(val) {
-      let that = this
-      console.log("实时屏幕宽度：", val, that.windowHeight)
+      headerHeight: 30,
+      asideWidth: 200
     }
   },
   mounted() {
