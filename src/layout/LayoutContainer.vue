@@ -5,16 +5,16 @@
                    :header-height="headerHeight"
                    :aside-width="asideWidth">
       <template #header>
-        <LayoutHeader :height="headerHeight">
+        <LayoutHeader :height="windowHeight">
         </LayoutHeader>
       </template>
       <template #aside>
-        <LayoutAside :height="windowHeight"
+        <LayoutAside :height="windowHeight - headerHeight"
                      :width="asideWidth">
         </LayoutAside>
       </template>
-      <LayoutContent :height="windowHeight - headerHeight">
-      </LayoutContent>
+      <!--      <LayoutContent :height="windowHeight - headerHeight">-->
+      <!--      </LayoutContent>-->
       <template #footer>
         <LayoutFooter></LayoutFooter>
       </template>
@@ -37,7 +37,7 @@ export default defineComponent({
     return {
       windowWidth: document.documentElement.clientWidth,
       windowHeight: document.documentElement.clientHeight,
-      headerHeight: 30,
+      headerHeight: 55,
       asideWidth: 200
     }
   },
