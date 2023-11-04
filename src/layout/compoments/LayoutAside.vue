@@ -1,7 +1,7 @@
 <template>
   <div>
     <TinyLayout
-        :style="{height: height + 'px', padding: '10px 0px', textAlign: 'center', backgroundColor: '#FFFFFF'}">
+        :style="{height: height + 'px', padding: '10px 0px', textAlign: 'center', backgroundColor: '#FFFFFF', borderRightWidth: '1px', borderRightStyle: 'groove'}">
       <TinyDropdown split-button
                     type="primary"
                     @button-click="handlerButtonClick">
@@ -116,14 +116,18 @@ export default defineComponent({
       this.$emit('onClick', note)
     },
     handlerSave(note: Note) {
-      note.id = 0
-      invoke('create_note', {note: note})
+      if (!note.modify) {
+        note.id = 0
+      }
+      const cmd = note.modify ? 'update_note' : 'create_note'
+      invoke(cmd, {note: note})
           .then(value => {
             const response = value as Response
             if (response.code === 200 && response.data) {
+              const message = note.modify ? `保存 [ ${note.title} ] 成功` : `新建 [ ${note.title} ] 成功`
               Notify({
                 type: 'success',
-                message: `保存 [ ${note.title} ] 成功`,
+                message: message,
                 position: 'top',
                 title: '提示',
                 duration: 1000
@@ -151,6 +155,11 @@ export default defineComponent({
         tree.setCurrentKey(this.node.id)
       } else {
         tree.setCurrentKey(undefined)
+      }
+    },
+    'node.modify': {
+      handler() {
+        this.node.draft = true
       }
     }
   }

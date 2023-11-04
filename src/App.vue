@@ -1,5 +1,6 @@
 <template>
-  <div id="app">
+  <div id="app"
+       :style="{backgroundColor: '#FFFFFF'}">
     <router-view></router-view>
   </div>
 </template>
