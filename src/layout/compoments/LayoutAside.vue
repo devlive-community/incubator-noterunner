@@ -1,7 +1,7 @@
 <template>
   <div>
     <TinyLayout
-        :style="{height: height + 'px', padding: '10px 0px', textAlign: 'center', backgroundColor: '#FFFFFF'}">
+        :style="{height: height + 'px', padding: '10px 0px', textAlign: 'center', backgroundColor: '#FFFFFF', borderRightWidth: '1px', borderRightStyle: 'groove'}">
       <TinyDropdown split-button
                     type="primary"
                     @button-click="handlerButtonClick">
@@ -25,6 +25,10 @@
               <IconSave @click="handlerSave(node.data)"></IconSave>
             </TinyTooltip>
           </div>
+          <TinyTooltip effect="dark"
+                       content="删除">
+            <IconDel @click="handlerDelete(node.data)"></IconDel>
+          </TinyTooltip>
         </template>
       </TinyTree>
     </TinyLayout>
@@ -43,7 +47,7 @@ import {
   Tooltip as TinyTooltip,
   Tree as TinyTree
 } from '@opentiny/vue'
-import {IconSave} from '@opentiny/vue-icon'
+import {IconDel, IconSave} from '@opentiny/vue-icon'
 import {invoke} from '@tauri-apps/api/tauri'
 import {Note} from "../../model/note.ts";
 import {Response} from "../../model/response.ts";
@@ -58,7 +62,8 @@ export default defineComponent({
     TinyDivider,
     TinyTooltip,
     TinyTree,
-    IconSave: IconSave()
+    IconSave: IconSave(),
+    IconDel: IconDel()
   },
   props: {
     height: {
@@ -66,6 +71,9 @@ export default defineComponent({
     },
     width: {
       type: Number
+    },
+    node: {
+      type: Object as () => Note
     }
   },
   data() {
@@ -113,14 +121,18 @@ export default defineComponent({
       this.$emit('onClick', note)
     },
     handlerSave(note: Note) {
-      note.id = 0
-      invoke('create_note', {note: note})
+      if (!note.modify) {
+        note.id = 0
+      }
+      const cmd = note.modify ? 'update_note' : 'create_note'
+      invoke(cmd, {note: note})
           .then(value => {
             const response = value as Response
             if (response.code === 200 && response.data) {
+              const message = note.modify ? `保存 [ ${note.title} ] 成功` : `新建 [ ${note.title} ] 成功`
               Notify({
                 type: 'success',
-                message: `保存 [ ${note.title} ] 成功`,
+                message: message,
                 position: 'top',
                 title: '提示',
                 duration: 1000
@@ -139,6 +151,48 @@ export default defineComponent({
     },
     handlerNodeClick(data: Note) {
       this.$emit('onClick', data)
+    },
+    handlerDelete(note: Note) {
+      invoke('delete_note', {id: note.id})
+          .then(value => {
+            const response = value as Response
+            if (response.code === 200 && response.data) {
+              Notify({
+                type: 'success',
+                message: `删除 [ ${note.title} ] 成功`,
+                position: 'top',
+                title: '提示',
+                duration: 1000
+              })
+              this.$emit('onDelete', note)
+              this.handlerInitialize()
+            } else {
+              Notify({
+                type: 'error',
+                message: response.message,
+                position: 'top',
+                title: '错误',
+                duration: 1000
+              })
+            }
+          })
+    }
+  },
+  watch: {
+    node() {
+      const tree = this.$refs.tree as any
+      if (this.node) {
+        tree.setCurrentKey(this.node.id)
+      } else {
+        tree.setCurrentKey(undefined)
+      }
+    },
+    'node.modify': {
+      handler() {
+        if (this.node) {
+          this.node.draft = true
+        }
+      }
     }
   }
 });

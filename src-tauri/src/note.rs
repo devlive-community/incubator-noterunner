@@ -66,3 +66,37 @@ pub async fn create_note(note: Note) -> Response<Option<bool>> {
         Err(_err) => Response::new(500, Some(false), _err.to_string()),
     }
 }
+
+#[tauri::command]
+pub async fn update_note(note: Note) -> Response<Option<bool>> {
+    match exec(|conn| {
+        let conn = conn.execute(
+            "REPLACE INTO notes (id, title, editor, content, is_delete)\
+             VALUES (:id, :title, :editor, :content, :is_delete)",
+            params![
+                note.id,
+                note.title,
+                note.editor,
+                note.content,
+                false
+            ],
+        )?;
+        Ok(conn > 0)
+    })
+    {
+        Ok(_count) => Response::new(200, Some(true), "Successful！".to_string()),
+        Err(_err) => Response::new(500, Some(false), _err.to_string()),
+    }
+}
+
+#[tauri::command]
+pub async fn delete_note(id: i32) -> Response<Option<bool>> {
+    match exec(|conn| {
+        let conn = conn.execute("DELETE FROM notes WHERE id = ?", params![id])?;
+        Ok(conn > 0)
+    })
+    {
+        Ok(_count) => Response::new(200, Some(true), "Successful！".to_string()),
+        Err(_err) => Response::new(500, Some(false), _err.to_string()),
+    }
+}

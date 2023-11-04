@@ -18,13 +18,13 @@
 
 </div>
 
-### What is Notepad?
+### 什么是 Notepad?
 
 ---
 
-Notepad is an open-source software developed using the Rust language. It is a neat text editor that works on a variety of operating system platforms. The software is designed to provide a lightweight and efficient editing environment to meet the basic needs of users for editing text files.
+Notepad 是一个开源软件，使用 Rust 语言进行开发。它是一款简洁的文本编辑器，适用于各种操作系统平台。该软件的设计理念是提供一个轻量级、高效的编辑环境，以满足用户对于编辑文本文件的基本需求。
 
-### Require
+### 必要环境
 
 ---
 
@@ -34,26 +34,26 @@ Notepad is an open-source software developed using the Rust language. It is a ne
 |  `Tauri`   | `1.5.x` |
 
 
-### Supported Editor
+### 支持的编辑器
 
 ---
 
 - Markdown
 
-## Stargazers over time
+## 贡献图谱
 
 ---
 
 [![Star History Chart](https://api.star-history.com/svg?repos=devlive-community/incubator-notepad&type=Timeline)](https://star-history.com/#devlive-community/incubator-notepad&Timeline)
 
-## Thank you
+## 鸣谢
 
 ---
 
 [![Jetbrains](https://img.shields.io/badge/Development-Jetbrains-brightgreen?style=flat-square)](https://www.jetbrains.com/)
 [![OpenTiny](https://img.shields.io/badge/OpenTiny-brightgreen?style=flat-square)](https://opentiny.design/)
 
-## Contributors
+## 贡献者
 
 ---
 
