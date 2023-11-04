@@ -25,6 +25,10 @@
               <IconSave @click="handlerSave(node.data)"></IconSave>
             </TinyTooltip>
           </div>
+          <TinyTooltip effect="dark"
+                       content="删除">
+            <IconDel @click="handlerDelete(node.data)"></IconDel>
+          </TinyTooltip>
         </template>
       </TinyTree>
     </TinyLayout>
@@ -43,7 +47,7 @@ import {
   Tooltip as TinyTooltip,
   Tree as TinyTree
 } from '@opentiny/vue'
-import {IconSave} from '@opentiny/vue-icon'
+import {IconDel, IconSave} from '@opentiny/vue-icon'
 import {invoke} from '@tauri-apps/api/tauri'
 import {Note} from "../../model/note.ts";
 import {Response} from "../../model/response.ts";
@@ -58,7 +62,8 @@ export default defineComponent({
     TinyDivider,
     TinyTooltip,
     TinyTree,
-    IconSave: IconSave()
+    IconSave: IconSave(),
+    IconDel: IconDel()
   },
   props: {
     height: {
@@ -146,6 +151,31 @@ export default defineComponent({
     },
     handlerNodeClick(data: Note) {
       this.$emit('onClick', data)
+    },
+    handlerDelete(note: Note) {
+      invoke('delete_note', {id: note.id})
+          .then(value => {
+            const response = value as Response
+            if (response.code === 200 && response.data) {
+              Notify({
+                type: 'success',
+                message: `删除 [ ${note.title} ] 成功`,
+                position: 'top',
+                title: '提示',
+                duration: 1000
+              })
+              this.$emit('onDelete', note)
+              this.handlerInitialize()
+            } else {
+              Notify({
+                type: 'error',
+                message: response.message,
+                position: 'top',
+                title: '错误',
+                duration: 1000
+              })
+            }
+          })
     }
   },
   watch: {
@@ -159,7 +189,9 @@ export default defineComponent({
     },
     'node.modify': {
       handler() {
-        this.node.draft = true
+        if (this.node) {
+          this.node.draft = true
+        }
       }
     }
   }

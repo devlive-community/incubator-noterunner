@@ -46,6 +46,9 @@ export default defineComponent({
     },
     note: {
       type: Object as () => Note
+    },
+    deletedNote: {
+      type: Object as () => Note
     }
   },
   data() {
@@ -94,6 +97,11 @@ export default defineComponent({
           note.modify = true
         }
         this.$emit('onClick', this.note)
+      }
+    },
+    deletedNote() {
+      if (this.deletedNote) {
+        this.handlerClose(this.deletedNote?.name)
       }
     }
   }

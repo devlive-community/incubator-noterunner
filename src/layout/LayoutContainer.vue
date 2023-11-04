@@ -6,11 +6,13 @@
         <LayoutAside :height="windowHeight - headerHeight"
                      :width="asideWidth"
                      :node="selectedNode"
-                     @onClick="handlerAsideClick($event)">
+                     @onClick="handlerAsideClick($event)"
+                     @onDelete="handlerOnDelete">
         </LayoutAside>
       </template>
       <LayoutContent :height="windowHeight"
                      :note="note"
+                     :deletedNote="deletedNode"
                      @onClick="handlerContentClick">
       </LayoutContent>
     </TinyContainer>
@@ -34,7 +36,8 @@ export default defineComponent({
       headerHeight: 55,
       asideWidth: 200,
       note: undefined as Note | undefined,
-      selectedNode: undefined as Note | undefined
+      selectedNode: undefined as Note | undefined,
+      deletedNode: undefined as Note | undefined
     }
   },
   methods: {
@@ -43,6 +46,9 @@ export default defineComponent({
     },
     handlerContentClick(value: Note) {
       this.selectedNode = value
+    },
+    handlerOnDelete(note: Note) {
+      this.deletedNode = note
     }
   }
 });

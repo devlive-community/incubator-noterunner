@@ -17,7 +17,8 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             note::get_notes,
             note::create_note,
-            note::update_note
+            note::update_note,
+            note::delete_note
         ])
         .run(tauri::generate_context!())
         .expect("Failed running tauri application");
