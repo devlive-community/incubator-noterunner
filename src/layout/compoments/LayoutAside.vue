@@ -153,29 +153,34 @@ export default defineComponent({
       this.$emit('onClick', data)
     },
     handlerDelete(note: Note) {
-      invoke('delete_note', {id: note.id})
-          .then(value => {
-            const response = value as Response
-            if (response.code === 200 && response.data) {
-              Notify({
-                type: 'success',
-                message: `删除 [ ${note.title} ] 成功`,
-                position: 'top',
-                title: '提示',
-                duration: 1000
-              })
-              this.$emit('onDelete', note)
-              this.handlerInitialize()
-            } else {
-              Notify({
-                type: 'error',
-                message: response.message,
-                position: 'top',
-                title: '错误',
-                duration: 1000
-              })
-            }
-          })
+      if (note.id.toString().startsWith('custom_')) {
+        const tree = this.$refs.tree as any
+        tree.remove(note.id)
+      } else {
+        invoke('delete_note', {id: note.id})
+            .then(value => {
+              const response = value as Response
+              if (response.code === 200 && response.data) {
+                Notify({
+                  type: 'success',
+                  message: `删除 [ ${note.title} ] 成功`,
+                  position: 'top',
+                  title: '提示',
+                  duration: 1000
+                })
+                this.$emit('onDelete', note)
+                this.handlerInitialize()
+              } else {
+                Notify({
+                  type: 'error',
+                  message: response.message,
+                  position: 'top',
+                  title: '错误',
+                  duration: 1000
+                })
+              }
+            })
+      }
     }
   },
   watch: {
