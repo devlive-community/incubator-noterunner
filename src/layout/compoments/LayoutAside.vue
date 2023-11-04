@@ -66,6 +66,9 @@ export default defineComponent({
     },
     width: {
       type: Number
+    },
+    node: {
+      type: Object as () => Note
     }
   },
   data() {
@@ -139,6 +142,16 @@ export default defineComponent({
     },
     handlerNodeClick(data: Note) {
       this.$emit('onClick', data)
+    }
+  },
+  watch: {
+    node() {
+      const tree = this.$refs.tree as any
+      if (this.node) {
+        tree.setCurrentKey(this.node.id)
+      } else {
+        tree.setCurrentKey(undefined)
+      }
     }
   }
 });

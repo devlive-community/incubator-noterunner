@@ -4,7 +4,8 @@
       <TinyTabs v-model="activeTab"
                 tab-style="card"
                 :with-close="true"
-                @close="handlerClose">
+                @close="handlerClose"
+                @click="handlerClick">
         <TinyTabItem v-for="item in tabs"
                      :key="item.key"
                      :title="item.title"
@@ -68,6 +69,11 @@ export default defineComponent({
         this.activeTab = this.tabs[0].name
       }
       this.tabs.splice(index, 1)
+      this.handlerClick({name: this.activeTab})
+    },
+    handlerClick(tab: any) {
+      const index = this.tabs.findIndex(item => item.name === tab.name)
+      this.$emit('onClick', this.tabs[index])
     }
   }
 });
