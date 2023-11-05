@@ -14,15 +14,20 @@
             <div>
               <TinyBadge v-if="item.modify"
                          is-dot>
-                {{ item.title }}
+                {{ item.title ? item.title : '无标题' }}
               </TinyBadge>
-              <span v-else>{{ item.title }}</span>
+              <span v-else>{{ item.title ? item.title : '无标题' }}</span>
             </div>
           </template>
+          <TinyInput v-model="item.title"
+                     size="medium"
+                     placeholder="无标题">
+          </TinyInput>
           <MarkdownEditor v-if="item.editor === 'Markdown'"
-                          :height="(height as number - 75)"
+                          :height="(height as number - 110)"
                           :content="item.content"
                           :key="item.key"
+                          :style="{marginTop: '-1px'}"
                           @onChange="handlerChange($event, item)">
           </MarkdownEditor>
         </TinyTabItem>
@@ -33,13 +38,19 @@
 
 <script lang="ts">
 import {defineComponent} from "vue"
-import {Badge as TinyBadge, Layout as TinyLayout, TabItem as TinyTabItem, Tabs as TinyTabs} from '@opentiny/vue'
+import {
+  Badge as TinyBadge,
+  Input as TinyInput,
+  Layout as TinyLayout,
+  TabItem as TinyTabItem,
+  Tabs as TinyTabs
+} from '@opentiny/vue'
 import MarkdownEditor from "../../components/MarkdownEditor.vue";
 import {Note} from "../../model/note.ts";
 
 export default defineComponent({
   name: 'LayoutContent',
-  components: {MarkdownEditor, TinyLayout, TinyTabs, TinyTabItem, TinyBadge},
+  components: {MarkdownEditor, TinyLayout, TinyTabs, TinyTabItem, TinyBadge, TinyInput},
   props: {
     height: {
       type: Number
@@ -107,8 +118,9 @@ export default defineComponent({
   }
 });
 </script>
-<style scoped>
-.tiny-tabs__content {
-  padding: 0;
+<style>
+.tiny-input__inner {
+  border: 0px solid transparent !important;
+  font-size: 20px !important;
 }
 </style>

@@ -128,7 +128,7 @@ export default defineComponent({
     },
     handlerButtonClick(type: string) {
       const key = Date.now().toString()
-      const title = '新笔记' + key
+      const title = '无标题'
       const note: Note = {
         id: 'custom_' + key,
         key: key,
