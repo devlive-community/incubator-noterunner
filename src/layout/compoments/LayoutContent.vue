@@ -20,7 +20,7 @@
             </div>
           </template>
           <MarkdownEditor v-if="item.editor === 'Markdown'"
-                          :style="{height: (height as number - 75) + 'px'}"
+                          :height="(height as number - 75)"
                           :content="item.content"
                           :key="item.key"
                           @onChange="handlerChange($event, item)">
