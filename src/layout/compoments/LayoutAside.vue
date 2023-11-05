@@ -161,6 +161,9 @@ export default defineComponent({
                 title: '提示',
                 duration: 1000
               })
+              note.draft = false
+              note.saved = true
+              this.$emit('onClick', note)
               this.handlerInitialize()
             } else {
               Notify({

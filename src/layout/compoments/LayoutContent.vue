@@ -21,7 +21,8 @@
           </template>
           <TinyInput v-model="item.title"
                      size="medium"
-                     placeholder="无标题">
+                     placeholder="无标题"
+                     @change="handlerChange($event, item)">
           </TinyInput>
           <MarkdownEditor v-if="item.editor === 'Markdown'"
                           :height="(height as number - 110)"
@@ -89,26 +90,36 @@ export default defineComponent({
     handlerClick(tab: any) {
       const index = this.tabs.findIndex(item => item.name === tab.name)
       this.$emit('onClick', this.tabs[index])
+    },
+    emitOnClick(note: Note) {
+      if (!note.id.toString().startsWith('custom_')) {
+        note.modify = true
+      }
+      this.$emit('onClick', this.note)
     }
   },
   watch: {
-    note() {
-      const hasValue = this.tabs.filter(item => item.name === this.note?.name)
-      if (hasValue.length === 0) {
-        this.tabs.push(<Note>this.note)
-      }
-      const note = this.note as Note
-      this.activeTab = note.key
+    note: {
+      handler() {
+        const hasValue = this.tabs.filter(item => item.name === this.note?.name)
+        if (hasValue.length === 0) {
+          this.tabs.push(<Note>this.note)
+        }
+        const note = this.note as Note
+        this.activeTab = note.key
+        if (note.saved) {
+          this.handlerClose(note.name)
+        }
+      },
+      deep: true
     },
     // If a content modification is found, the current data is marked as modified
-    "activeNote.content": {
+    activeNote: {
       handler() {
         const note = this.activeNote as Note
-        if (!note.id.toString().startsWith('custom_')) {
-          note.modify = true
-        }
-        this.$emit('onClick', this.note)
-      }
+        this.emitOnClick(note)
+      },
+      deep: true
     },
     deletedNote() {
       if (this.deletedNote) {
