@@ -1,7 +1,7 @@
 const describe = `
 <div align="center">
 
-<img width='100' height='100' style="margin-bottom: -30px;" src="./src-tauri/icons/icon.png" />
+<img width='100' height='100' style="margin-bottom: -30px;" src="/icon.png" />
 
 # Notepad (Incubator)
 
