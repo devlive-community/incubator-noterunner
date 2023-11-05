@@ -14,15 +14,21 @@
             <div>
               <TinyBadge v-if="item.modify"
                          is-dot>
-                {{ item.title }}
+                {{ item.title ? item.title : '无标题' }}
               </TinyBadge>
-              <span v-else>{{ item.title }}</span>
+              <span v-else>{{ item.title ? item.title : '无标题' }}</span>
             </div>
           </template>
+          <TinyInput v-model="item.title"
+                     size="medium"
+                     placeholder="无标题"
+                     @change="handlerChange($event, item)">
+          </TinyInput>
           <MarkdownEditor v-if="item.editor === 'Markdown'"
-                          :style="{height: (height as number - 75) + 'px'}"
+                          :height="(height as number - 110)"
                           :content="item.content"
                           :key="item.key"
+                          :style="{marginTop: '-1px'}"
                           @onChange="handlerChange($event, item)">
           </MarkdownEditor>
         </TinyTabItem>
@@ -33,13 +39,19 @@
 
 <script lang="ts">
 import {defineComponent} from "vue"
-import {Badge as TinyBadge, Layout as TinyLayout, TabItem as TinyTabItem, Tabs as TinyTabs} from '@opentiny/vue'
+import {
+  Badge as TinyBadge,
+  Input as TinyInput,
+  Layout as TinyLayout,
+  TabItem as TinyTabItem,
+  Tabs as TinyTabs
+} from '@opentiny/vue'
 import MarkdownEditor from "../../components/MarkdownEditor.vue";
 import {Note} from "../../model/note.ts";
 
 export default defineComponent({
   name: 'LayoutContent',
-  components: {MarkdownEditor, TinyLayout, TinyTabs, TinyTabItem, TinyBadge},
+  components: {MarkdownEditor, TinyLayout, TinyTabs, TinyTabItem, TinyBadge, TinyInput},
   props: {
     height: {
       type: Number
@@ -78,26 +90,36 @@ export default defineComponent({
     handlerClick(tab: any) {
       const index = this.tabs.findIndex(item => item.name === tab.name)
       this.$emit('onClick', this.tabs[index])
+    },
+    emitOnClick(note: Note) {
+      if (!note.id.toString().startsWith('custom_')) {
+        note.modify = true
+      }
+      this.$emit('onClick', this.note)
     }
   },
   watch: {
-    note() {
-      const hasValue = this.tabs.filter(item => item.name === this.note?.name)
-      if (hasValue.length === 0) {
-        this.tabs.push(<Note>this.note)
-      }
-      const note = this.note as Note
-      this.activeTab = note.key
+    note: {
+      handler() {
+        const hasValue = this.tabs.filter(item => item.name === this.note?.name)
+        if (hasValue.length === 0) {
+          this.tabs.push(<Note>this.note)
+        }
+        const note = this.note as Note
+        this.activeTab = note.key
+        if (note.saved) {
+          this.handlerClose(note.name)
+        }
+      },
+      deep: true
     },
     // If a content modification is found, the current data is marked as modified
-    "activeNote.content": {
+    activeNote: {
       handler() {
         const note = this.activeNote as Note
-        if (!note.id.toString().startsWith('custom_')) {
-          note.modify = true
-        }
-        this.$emit('onClick', this.note)
-      }
+        this.emitOnClick(note)
+      },
+      deep: true
     },
     deletedNote() {
       if (this.deletedNote) {
@@ -107,8 +129,9 @@ export default defineComponent({
   }
 });
 </script>
-<style scoped>
-.tiny-tabs__content {
-  padding: 0;
+<style>
+.tiny-input__inner {
+  border: 0px solid transparent !important;
+  font-size: 20px !important;
 }
 </style>

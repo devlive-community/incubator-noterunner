@@ -7,5 +7,6 @@ export interface Note {
     editor: string,
     content: string,
     draft: boolean,
-    modify?: boolean
+    modify?: boolean,
+    saved?: boolean
 }

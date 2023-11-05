@@ -1,25 +1,30 @@
 <template>
   <div>
-    <VMarkdownEditor v-model="localContent"
-                     :key="key">
-    </VMarkdownEditor>
+    <MdEditor v-model="localContent"
+              :style="{height: height + 'px'}"
+              :toolbarsExclude="['fullscreen', 'github', 'htmlPreview', 'save']"
+              :editorId="key">
+    </MdEditor>
   </div>
 </template>
 
 <script>
 import {defineComponent} from 'vue'
-import {VMarkdownEditor} from 'vue3-markdown'
-import 'vue3-markdown/dist/style.css'
+import {MdEditor} from 'md-editor-v3'
+import 'md-editor-v3/lib/style.css'
 
 export default defineComponent({
   name: 'MarkdownEditor',
-  components: {VMarkdownEditor},
+  components: {MdEditor},
   props: {
     content: {
       type: String
     },
     key: {
       type: String | Number
+    },
+    height: {
+      type: Number
     }
   },
   data() {
