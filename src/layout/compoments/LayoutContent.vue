@@ -1,6 +1,9 @@
 <template>
   <div>
     <TinyLayout :style="{backgroundColor: '#FFFFFF', height: height + 'px'}">
+      <MdPreview v-if="tabs.length === 0"
+          :modelValue="describe.describe">
+      </MdPreview>
       <TinyTabs v-model="activeTab"
                 tab-style="card"
                 :with-close="true"
@@ -46,12 +49,14 @@ import {
   TabItem as TinyTabItem,
   Tabs as TinyTabs
 } from '@opentiny/vue'
-import MarkdownEditor from "../../components/MarkdownEditor.vue";
-import {Note} from "../../model/note.ts";
+import MarkdownEditor from "../../components/MarkdownEditor.vue"
+import {MdPreview} from 'md-editor-v3'
+import {Note} from "../../model/note.ts"
+import describe from '../../note/home.ts'
 
 export default defineComponent({
   name: 'LayoutContent',
-  components: {MarkdownEditor, TinyLayout, TinyTabs, TinyTabItem, TinyBadge, TinyInput},
+  components: {MarkdownEditor, TinyLayout, TinyTabs, TinyTabItem, TinyBadge, TinyInput, MdPreview},
   props: {
     height: {
       type: Number
@@ -67,7 +72,8 @@ export default defineComponent({
     return {
       activeTab: '',
       activeNote: this.note,
-      tabs: Array<Note>()
+      tabs: Array<Note>(),
+      describe: describe
     }
   },
   methods: {
