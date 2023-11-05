@@ -1,8 +1,7 @@
 name: Publish binary
 
 on:
-  release:
-    types: [ published ]
+  workflow_dispatch:
 
 jobs:
   publish-tauri:
@@ -17,7 +16,7 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 18
       - name: install Rust stable
         uses: actions-rs/toolchain@v1
         with:
@@ -28,13 +27,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y webkit2gtk-4.0
       - name: install app dependencies and build it
-        run: yarn && yarn build
+        run: yarn && yarn build && npm -g install pnpm
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: app-v__VERSION__
-          releaseName: 'App v__VERSION__'
+          tagName: __VERSION__
+          releaseName: '__VERSION__'
           releaseBody: 'See the assets to download this version and install.'
-          releaseDraft: true
+          releaseDraft: false
           prerelease: false
