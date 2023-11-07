@@ -22,7 +22,7 @@ impl App {
                 app_dir: PathBuf::new(),
             },
             Some(p) => App {
-                app_dir: p.join("org.devlive.notepad"),
+                app_dir: p.join("org.devlive.noterunner"),
             },
         }
     }
