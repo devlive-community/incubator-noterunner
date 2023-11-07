@@ -1,7 +1,7 @@
 ## Contributing
 
-[fork]: https://github.com/devlive-community/incubator-notepad/fork
-[pr]: https://github.com/devlive-community/incubator-notepad/compare
+[fork]: https://github.com/devlive-community/incubator-noterunner/fork
+[pr]: https://github.com/devlive-community/incubator-noterunner/compare
 [code-of-conduct]: CODE_OF_CONDUCT.md
 
 Hi there! We're thrilled that you'd like to contribute to this project. Your help is essential for keeping it great.

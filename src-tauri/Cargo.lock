@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "Notepad"
+name = "NoteRunner"
 version = "1.0.0"
 dependencies = [
  "lazy_static",

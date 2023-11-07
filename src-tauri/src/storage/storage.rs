@@ -2,7 +2,7 @@ use std::path::PathBuf;
 use log::info;
 use rusqlite::{Connection, Error};
 
-const DB_FILE: &str = "notepad.db";
+const DB_FILE: &str = "noterunner.db";
 
 fn open_connection() -> Result<Connection, Error> {
     let database = PathBuf::from(&crate::app::APP.lock().app_dir)
