@@ -18,6 +18,17 @@
               <span class="icon-text">Markdown</span>
             </div>
           </TinyButton>
+          <TinyButton round
+                      type="success"
+                      size="medium"
+                      :reset-time="0"
+                      :style="{marginTop: '5px'}"
+                      @click="handlerButtonClick('Rich')">
+            <div class="icon-container">
+              <FontAwesomeIcon :icon="['fa', 'pencil-square']"></FontAwesomeIcon>
+              <span class="icon-text">富文本</span>
+            </div>
+          </TinyButton>
         </div>
         <template #reference>
           <TinyButton round

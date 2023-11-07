@@ -2,7 +2,7 @@
   <div>
     <TinyLayout :style="{backgroundColor: '#FFFFFF', height: height + 'px'}">
       <MdPreview v-if="tabs.length === 0"
-          :modelValue="describe.describe">
+                 :modelValue="describe.describe">
       </MdPreview>
       <TinyTabs v-model="activeTab"
                 tab-style="card"
@@ -34,6 +34,11 @@
                           :style="{marginTop: '-1px'}"
                           @onChange="handlerChange($event, item)">
           </MarkdownEditor>
+          <RichEditor v-if="item.editor === 'Rich'"
+                      :height="(height as number - 110)"
+                      :content="item.content"
+                      @onChange="handlerChange($event, item)">
+          </RichEditor>
         </TinyTabItem>
       </TinyTabs>
     </TinyLayout>
@@ -53,10 +58,14 @@ import MarkdownEditor from "../../components/MarkdownEditor.vue"
 import {MdPreview} from 'md-editor-v3'
 import {Note} from "../../model/note.ts"
 import describe from '../../note/home.ts'
+import RichEditor from "../../components/RichEditor.vue";
 
 export default defineComponent({
   name: 'LayoutContent',
-  components: {MarkdownEditor, TinyLayout, TinyTabs, TinyTabItem, TinyBadge, TinyInput, MdPreview},
+  components: {
+    RichEditor,
+    MarkdownEditor, TinyLayout, TinyTabs, TinyTabItem, TinyBadge, TinyInput, MdPreview
+  },
   props: {
     height: {
       type: Number
@@ -79,6 +88,7 @@ export default defineComponent({
   methods: {
     handlerChange(content: string, note: Note) {
       note.content = content
+      console.log(content)
       this.activeNote = note
       this.$emit('onClick', this.note)
     },

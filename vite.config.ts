@@ -12,5 +12,13 @@ export default defineConfig(async () => ({
     // Support tiny-vue
     define: {
         'process.env': {...process.env}
+    },
+    // Pass options to CSS-related loaders
+    css: {
+        preprocessorOptions: {
+            less: {
+                javascriptEnabled: true,
+            }
+        }
     }
-}));
+}))
